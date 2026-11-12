@@ -14,6 +14,12 @@ public class InventoryManager : MonoBehaviour
 
         // search for an item by ID (binary search)
         BinarySearchByID(inventory[Random.Range(0, inventory.Length)].ID);
+        
+        // search for an item by Value (Quick Sort)
+        QuickSortByValue(0, inventory.Length - 1);
+
+        PrintArray(); // print the sorted inventory by value
+
     }
 
     // initialize inventory method
@@ -133,6 +139,46 @@ public class InventoryManager : MonoBehaviour
         for (int i = 0; i < inventory.Length; i++)
         {
             Debug.Log($"ITEM {i} -- Name: {inventory[i].Name} | ID: {inventory[i].ID} | Value: {inventory[i].Value}");
+        }
+    }
+
+    private int QuickSortPartitionValue(int first, int last)
+    {
+        // sets the pivot to the Value of the last array index provided
+        int pivot = inventory[last].Value;
+        int smaller = first - 1;
+
+        // iterate through the array at the given index range
+        for (int e = first; e < last; e++)
+        {
+            // if the inventory item's Value is less than pivot number's Value, swap spots
+            if (inventory[e].Value < pivot)
+            {
+                smaller++; // increment index
+
+                // swap the smaller inventory item with the current item
+                InventoryItem temp = inventory[smaller];
+                inventory[smaller] = inventory[e];
+                inventory[e] = temp;
+            }
+        }
+
+        // after reaching the end of the loop, ensure the last item in this partition is the last index value
+        InventoryItem tempNext = inventory[smaller + 1];
+        inventory[smaller + 1] = inventory[last];
+        inventory[last] = tempNext;
+
+        return smaller + 1;
+    }
+
+    private void QuickSortByValue(int first, int last)
+    {
+        // recursive call until given values are sorted
+        if (first < last)
+        {
+            int pivot = QuickSortPartitionValue(first, last);
+            QuickSortByValue(first, pivot - 1); // from first num to pivot - 1
+            QuickSortByValue(pivot + 1, last); // from pivot + 1 to last num
         }
     }
 }

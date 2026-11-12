@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InventoryItem : MonoBehaviour
+public class InventoryItem
 {
     public int ID { get; set; }
     public string Name { get; set; }
