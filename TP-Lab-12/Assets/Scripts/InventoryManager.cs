@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    private InventoryItem[] inventory;
+
+    private List<InventoryItem> inventory = new List<InventoryItem>();
 
     void Start()
     {
@@ -13,10 +15,10 @@ public class InventoryManager : MonoBehaviour
         LinearSearchByName("Potion");
 
         // search for an item by ID (binary search)
-        BinarySearchByID(inventory[Random.Range(0, inventory.Length)].ID);
+        BinarySearchByID(inventory[Random.Range(0, inventory.Count)].ID);
         
         // search for an item by Value (Quick Sort)
-        QuickSortByValue(0, inventory.Length - 1);
+        QuickSortByValue(0, inventory.Count - 1);
 
         PrintArray(); // print the sorted inventory by value
 
@@ -26,14 +28,14 @@ public class InventoryManager : MonoBehaviour
     private void InitializeInventory()
     {
         string[] itemNames = { "Sword", "Shield", "Potion", "Bow", "Arrow" };
-        inventory = new InventoryItem[itemNames.Length];
+        inventory = new List<InventoryItem>();
 
         for (int i = 0; i < itemNames.Length; i++)
         {
             int randomID = Random.Range(1, 1000); // Generate a random ID for the item
             int randomValue = Random.Range(10, 100); // Generate a random value for the item
             InventoryItem item = new InventoryItem(randomID, itemNames[i], randomValue);
-            inventory[i] = item; //add item to list
+            inventory.Add(item); //add item to list
         }
     }
 
@@ -41,7 +43,7 @@ public class InventoryManager : MonoBehaviour
     private InventoryItem LinearSearchByName(string itemName)
     {
 
-        for (int i = 0; i < inventory.Length; i++)
+        for (int i = 0; i < inventory.Count; i++)
         {
             if (inventory[i].Name == itemName)
             {
@@ -57,14 +59,14 @@ public class InventoryManager : MonoBehaviour
     private InventoryItem BinarySearchByID(int ID)
     {
         // sorts inventory by ID first 
-        QuickSortByID(0, inventory.Length - 1);
+        QuickSortByID(0, inventory.Count - 1);
 
         // prints out inventory to confirm sorting worked
         PrintArray();
 
         // lower bound and upper bound indices
         int left = 0;
-        int right = inventory.Length - 1;
+        int right = inventory.Count - 1;
 
         // loop until numbers converge 
         while (left <= right)
@@ -136,7 +138,7 @@ public class InventoryManager : MonoBehaviour
     // helper method to print out array 
     private void PrintArray()
     {
-        for (int i = 0; i < inventory.Length; i++)
+        for (int i = 0; i < inventory.Count; i++)
         {
             Debug.Log($"ITEM {i} -- Name: {inventory[i].Name} | ID: {inventory[i].ID} | Value: {inventory[i].Value}");
         }
